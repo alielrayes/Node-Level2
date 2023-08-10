@@ -19,7 +19,7 @@ router.get("/signup", (req, res) => {
 router.post("/signup", async (req, res) => {
   try {
     const result = await AuthUser.create(req.body);
-    console.log(result);
+   
   } catch (error) {
     console.log(error);
   }
