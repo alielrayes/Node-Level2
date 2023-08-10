@@ -3,6 +3,9 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 const AuthUser = require("../models/authUser");
 const bcrypt = require("bcrypt");
+var jwt = require("jsonwebtoken");
+
+
 // Level 2
 router.get("/", (req, res) => {
   res.render("welcome");
@@ -28,7 +31,7 @@ router.post("/login", async (req, res) => {
   console.log("__________________________________________");
 
   const loginUser = await AuthUser.findOne({ email: req.body.email });
-  console.log(loginUser);
+ 
 
   if (loginUser == null) {
     console.log("this email not found in DATABASE");
@@ -36,11 +39,39 @@ router.post("/login", async (req, res) => {
     const match = await bcrypt.compare(req.body.password, loginUser.password);
     if (match) {
       console.log("correct email & password");
+      var token = jwt.sign({ id: loginUser._id }, "c4a.dev");
+      console.log(token)
+
+
+      res.cookie("jwt", token, { httpOnly: true, maxAge: 86400000  });
+      res.redirect("/home")
+      
+
     } else {
       console.log("wrong password");
     }
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Level 1
 // GET Requst
