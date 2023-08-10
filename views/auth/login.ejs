@@ -54,12 +54,18 @@
       <main class="px-3">
         <h1>Log in</h1>
 
-        <form class="text-start mx-auto mt-5" style="max-width: 22em">
+        <form
+          action="/login"
+          method="post"
+          class="text-start mx-auto mt-5"
+          style="max-width: 22em"
+        >
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label"
               >Email address</label
             >
             <input
+            name="email"
               type="email"
               class="form-control"
               id="exampleInputEmail1"
@@ -71,7 +77,8 @@
               >Password</label
             >
             <input
-              type="password"
+            name="password"
+              type="text"
               class="form-control"
               id="exampleInputPassword1"
             />

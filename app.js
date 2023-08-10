@@ -3,10 +3,8 @@ const app = express();
 const port = 3001;
 const mongoose = require("mongoose");
 app.use(express.urlencoded({ extended: true }));
-
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-
 var methodOverride = require("method-override");
 app.use(methodOverride("_method"));
 const allRoutes = require("./routes/allRoutes");
