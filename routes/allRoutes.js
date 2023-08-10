@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
+const AuthUser = require("../models/authUser");
 
 // Level 2
 router.get("/", (req, res) => {
@@ -15,11 +16,14 @@ router.get("/signup", (req, res) => {
   res.render("auth/signup");
 });
 
-
-
-
-
-
+router.post("/signup", async (req, res) => {
+  try {
+    const result = await AuthUser.create(req.body);
+    console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 // Level 1
 // GET Requst

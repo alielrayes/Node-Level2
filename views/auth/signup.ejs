@@ -54,7 +54,12 @@
       <main class="px-3">
         <h1>Sign up</h1>
 
-        <form class="text-start mx-auto mt-5" style="max-width: 22em">
+        <form
+          action="/signup"
+          method="post"
+          class="text-start mx-auto mt-5"
+          style="max-width: 22em"
+        >
           <div class="mb-3">
             <label for="exampleInputUsername" class="form-label"
               >Username :</label
@@ -63,7 +68,7 @@
               type="text"
               class="form-control"
               id="exampleInputUsername"
-              aria-describedby="emailHelp"
+              name="username"
             />
           </div>
 
@@ -75,7 +80,7 @@
               type="email"
               class="form-control"
               id="exampleInputEmail1"
-              aria-describedby="emailHelp"
+              name="email"
             />
           </div>
           <div class="mb-3">
@@ -86,6 +91,7 @@
               type="password"
               class="form-control"
               id="exampleInputPassword1"
+              name="password"
             />
           </div>
           <div class="mb-3 form-check">
