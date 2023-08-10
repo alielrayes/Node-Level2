@@ -10,6 +10,13 @@ app.use(methodOverride("_method"));
 const allRoutes = require("./routes/allRoutes");
 const addUserRoute = require("./routes/addUser");
 
+
+// cookie-parser
+var cookieParser = require('cookie-parser')
+app.use(cookieParser())
+
+
+
 // Auto refresh
 const path = require("path");
 const livereload = require("livereload");
