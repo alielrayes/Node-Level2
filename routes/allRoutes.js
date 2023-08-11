@@ -7,7 +7,29 @@ var jwt = require("jsonwebtoken");
 var requireAuth = require("../middleware/middleware");
 
 
+const checkIfUser = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    // login user
+    jwt.verify(token, "c4a.dev", async (err, decoded) => {
+      if (err) {
+        res.locals.user = null;
+        next();
+      } else {
+        const loginUser = await AuthUser.findById(decoded.id);
 
+        res.locals.user = loginUser;
+        next();
+      }
+    });
+  } else {
+    // no login user
+    res.locals.user = null;
+    next();
+  }
+};
+
+router.get("*",checkIfUser)
 
 
 
@@ -57,11 +79,11 @@ router.post("/login", async (req, res) => {
 
 // Level 1
 // GET Requst
-router.get("/home",requireAuth, userController.user_index_get);
+router.get("/home", requireAuth, userController.user_index_get);
 
-router.get("/edit/:id",requireAuth, userController.user_edit_get);
+router.get("/edit/:id", requireAuth, userController.user_edit_get);
 
-router.get("/view/:id",requireAuth, userController.user_view_get);
+router.get("/view/:id", requireAuth, userController.user_view_get);
 
 router.post("/search", userController.user_search_post);
 
