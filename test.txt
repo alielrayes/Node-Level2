@@ -11,15 +11,22 @@
 
 
 
-
-
-{
-username : dddddddddd,
-email: dddddd,
-password : ddddddddd
-
-}
-
-
+[
+  {
+    type: 'field',
+    value: 'aaa',
+    msg: 'Please provide a valid email',
+    path: 'email',
+    location: 'body'
+  },
+  {
+    type: 'field',
+    value: 'ccc',
+    msg: 'Password must be at least 8 characters with 1 upper case letter and 1 number',
+    path: 'password',
+    location: 'body'
+  }
+]
+___
 
 

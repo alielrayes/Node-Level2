@@ -4,25 +4,20 @@ const userController = require("../controllers/userController");
 const AuthUser = require("../models/authUser");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
-var {requireAuth} = require("../middleware/middleware");
-const {checkIfUser} = require("../middleware/middleware")
+var { requireAuth } = require("../middleware/middleware");
+const { checkIfUser } = require("../middleware/middleware");
+const { check, validationResult } = require("express-validator");
 
-
-
-router.get("*",checkIfUser)
-
-
+router.get("*", checkIfUser);
 
 // Level 2
 
-router.get("/signout",  (req, res) => {
-  res.cookie("jwt", "", {  maxAge: 1 });
-  res.redirect("/")
+router.get("/signout", (req, res) => {
+  res.cookie("jwt", "", { maxAge: 1 });
+  res.redirect("/");
 });
 
-
-
-router.get("/",  (req, res) => {
+router.get("/", (req, res) => {
   console.log("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
   res.render("welcome");
 });
@@ -35,49 +30,39 @@ router.get("/signup", (req, res) => {
   res.render("auth/signup");
 });
 
+router.post(
+  "/signup",
+  [
+    check("email", "Please provide a valid email").isEmail(),
+    check(
+      "password",
+      "Password must be at least 8 characters with 1 upper case letter and 1 number"
+    ).matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/),
+  ],
+  async (req, res) => {
+    try {
+      const objError = validationResult(req);
+      console.log(objError.errors);
+      console.log(
+        "_____________________________________________________________"
+      );
+      if (objError.errors.length > 0) {
+        return console.log("invalid Email OR invalid Password");
+      }
 
+      const isCurrentEmail = await AuthUser.findOne({ email: req.body.email });
+      console.log(isCurrentEmail);
 
+      if (isCurrentEmail) {
+        return console.log("Email already exist");
+      }
 
-
-
-
-
-router.post("/signup", async (req, res) => {
-  try {
-  const isCurrentEmail = await AuthUser.findOne({ email:  req.body.email    })
-  console.log(isCurrentEmail)
-
-  if (isCurrentEmail) {
-    return  console.log("Email already exist")
+      const result = await AuthUser.create(req.body);
+    } catch (error) {
+      console.log(error);
+    }
   }
-
-
-
-
-    const result = await AuthUser.create(req.body);
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+);
 
 router.post("/login", async (req, res) => {
   console.log("__________________________________________");
