@@ -1,5 +1,7 @@
-
 var jwt = require("jsonwebtoken");
+const AuthUser = require("../models/authUser");
+
+
 
 const requireAuth = (req, res, next) => {
   console.log("before run the function");
@@ -18,24 +20,26 @@ const requireAuth = (req, res, next) => {
   }
 };
 
+const checkIfUser = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    // login user
+    jwt.verify(token, "c4a.dev", async (err, decoded) => {
+      if (err) {
+        res.locals.user = null;
+        next();
+      } else {
+        const loginUser = await AuthUser.findById(decoded.id);
 
+        res.locals.user = loginUser;
+        next();
+      }
+    });
+  } else {
+    // no login user
+    res.locals.user = null;
+    next();
+  }
+};
 
-
-
-module.exports = requireAuth
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = { requireAuth, checkIfUser };
