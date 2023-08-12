@@ -55,8 +55,8 @@
         <h1>Log in</h1>
 
         <form
-          action="/login"
-          method="post"
+  
+        id="signupForm"
           class="text-start mx-auto mt-5"
           style="max-width: 22em"
         >
@@ -65,23 +65,25 @@
               >Email address</label
             >
             <input
-            name="email"
+              name="email"
               type="email"
               class="form-control"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
             />
+            <p id="emailError"></p>
           </div>
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label"
               >Password</label
             >
             <input
-            name="password"
+              name="password"
               type="text"
               class="form-control"
               id="exampleInputPassword1"
             />
+            <p id="passwordError"></p>
           </div>
           <div class="mb-3 form-check">
             <input
@@ -101,6 +103,43 @@
         <p>Designed and developed by Ali Hassan © 2023</p>
       </footer>
     </div>
+    <script>
+      signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        emailError.textContent = "";
+        passwordError.textContent = "";
+
+        const res = await fetch("/login", {
+          method: "POST",
+          body: JSON.stringify({
+         
+            email: exampleInputEmail1.value,
+            password: exampleInputPassword1.value,
+          }),
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await res.json();
+       
+
+        if (data.notFoundEmail) {
+          emailError.textContent = data.notFoundEmail;
+        }
+
+
+        if (data.id) {
+          location.assign("/home")
+        }
+
+
+        if (data.passwordError) {
+          console.log(data)
+          passwordError.textContent = data.passwordError;
+        }
+
+       
+      });
+    </script>
     <script src="./js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

@@ -64,24 +64,25 @@ router.post(
 );
 
 router.post("/login", async (req, res) => {
-  console.log("__________________________________________");
+  try {
+    const loginUser = await AuthUser.findOne({ email: req.body.email });
 
-  const loginUser = await AuthUser.findOne({ email: req.body.email });
-
-  if (loginUser == null) {
-    console.log("this email not found in DATABASE");
-  } else {
-    const match = await bcrypt.compare(req.body.password, loginUser.password);
-    if (match) {
-      console.log("correct email & password");
-      var token = jwt.sign({ id: loginUser._id }, "c4a.dev");
-      console.log(token);
-
-      res.cookie("jwt", token, { httpOnly: true, maxAge: 86400000 });
-      res.redirect("/home");
+    if (loginUser == null) {
+      res.json({ notFoundEmail: "Email not found, try to sign up" });
     } else {
-      console.log("wrong password");
+      const match = await bcrypt.compare(req.body.password, loginUser.password);
+      if (match) {
+        var token = jwt.sign({ id: loginUser._id }, "c4a.dev");
+        res.cookie("jwt", token, { httpOnly: true, maxAge: 86400000 });
+        res.json({ id: loginUser._id });
+      } else {
+        res.json({
+          passwordError: `incorrect password for  ${req.body.email}`,
+        });
+      }
     }
+  } catch (error) {
+    console.log(error);
   }
 });
 
