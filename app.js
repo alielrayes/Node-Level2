@@ -10,7 +10,7 @@ app.use(methodOverride("_method"));
 const allRoutes = require("./routes/allRoutes");
 const addUserRoute = require("./routes/addUser");
 
-
+app.use(express.json())
 // cookie-parser
 var cookieParser = require('cookie-parser')
 app.use(cookieParser())

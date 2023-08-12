@@ -55,6 +55,7 @@
         <h1>Sign up</h1>
 
         <form
+          id="signupForm"
           action="/signup"
           method="post"
           class="text-start mx-auto mt-5"
@@ -112,6 +113,38 @@
         <p>Designed and developed by Ali Hassan © 2023</p>
       </footer>
     </div>
+    <script>
+      signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const res = await fetch("/signup", {
+          method: "POST",
+          body: JSON.stringify({
+            email: exampleInputEmail1.value,
+            password: exampleInputPassword1.value,
+          }),
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await res.json();
+        if (data.arrValidationError) {
+          console.log(data.arrValidationError)
+        }
+
+        if (data.existEmail) {
+          console.log(data.existEmail)
+        }
+
+
+        
+        if (data.id) {
+          console.log(data.id)
+          location.assign("/home")
+        }
+          
+        
+      });
+    </script>
     <script src="./js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
