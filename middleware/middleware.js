@@ -1,10 +1,7 @@
 var jwt = require("jsonwebtoken");
 const AuthUser = require("../models/authUser");
 
-
-
 const requireAuth = (req, res, next) => {
-  console.log("before run the function");
   const token = req.cookies.jwt;
 
   if (token) {
@@ -30,7 +27,7 @@ const checkIfUser = (req, res, next) => {
         next();
       } else {
         const loginUser = await AuthUser.findById(decoded.id);
-
+   
         res.locals.user = loginUser;
         next();
       }

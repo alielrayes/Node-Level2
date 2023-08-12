@@ -18,7 +18,6 @@ router.get("/signout", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-  console.log("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
   res.render("welcome");
 });
 
@@ -40,36 +39,24 @@ router.post(
     ).matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/),
   ],
   async (req, res) => {
-    console.log(req.body)
     try {
+      // check validation (email & password)
       const objError = validationResult(req);
-      // Array ==> objError.errors
-      console.log(objError.errors);
-      console.log(
-        "__________________________________________"
-      );
       if (objError.errors.length > 0) {
-        return   res.json(   { arrValidationError: objError.errors }    ) 
+        return res.json({ arrValidationError: objError.errors });
       }
 
+      // check if the email already exist
       const isCurrentEmail = await AuthUser.findOne({ email: req.body.email });
-      console.log(isCurrentEmail);
-
       if (isCurrentEmail) {
-        return   res.json(  {existEmail: "Email already exist"  }   )   
+        return res.json({ existEmail: "Email already exist" });
       }
 
+      // create new user and login
       const newUser = await AuthUser.create(req.body);
       var token = jwt.sign({ id: newUser._id }, "c4a.dev");
-       
-
       res.cookie("jwt", token, { httpOnly: true, maxAge: 86400000 });
-      res.json(   {id: newUser._id}     )
-
-
-
-
-
+      res.json({ id: newUser._id });
     } catch (error) {
       console.log(error);
     }
