@@ -10,23 +10,23 @@
   model.deleteOne({_id: req.params.id})  ==> Delete Request
 
 
-
 [
+  
   {
     type: 'field',
-    value: 'aaa',
+    value: '',
     msg: 'Please provide a valid email',
     path: 'email',
     location: 'body'
   },
+
+
   {
     type: 'field',
-    value: 'ccc',
+    value: '',
     msg: 'Password must be at least 8 characters with 1 upper case letter and 1 number',
     path: 'password',
     location: 'body'
   }
 ]
-___
-
 
