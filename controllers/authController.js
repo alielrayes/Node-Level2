@@ -38,7 +38,7 @@ const post_signup = async (req, res) => {
 
     // create new user and login
     const newUser = await AuthUser.create(req.body);
-    var token = jwt.sign({ id: newUser._id }, "c4a.dev");
+    var token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY);
     res.cookie("jwt", token, { httpOnly: true, maxAge: 86400000 });
     res.json({ id: newUser._id });
   } catch (error) {
@@ -55,7 +55,7 @@ const post_login = async (req, res) => {
     } else {
       const match = await bcrypt.compare(req.body.password, loginUser.password);
       if (match) {
-        var token = jwt.sign({ id: loginUser._id }, "c4a.dev");
+        var token = jwt.sign({ id: loginUser._id }, process.env.JWT_SECRET_KEY);
         res.cookie("jwt", token, { httpOnly: true, maxAge: 86400000 });
         res.json({ id: loginUser._id });
       } else {
